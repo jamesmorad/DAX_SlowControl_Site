@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--Add our necessary js libs-->
+<script src="static/js/jquery-1.11.3.min.js"></script>
+<script src="static/js/d3.js"></script>
+<script src="static/js/colorbar.js"></script>
+<script src="static/js/highstock.js"></script>
+<!-- Throw in some styles -->
+<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/css/mystylez.css">
+<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> 
+
+<!-- For future rereference: -->
+<!-- D3.js chart taken from http://bl.ocks.org/crayzeewulf/9719255-->
+
+<meta charset="utf-8">
+
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">DAX Controls</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">Home</a></li>
+      <li><a href="/proj_db_man">Management</a></li>
+      <li><a href="/project">Graphical Overview</a></li>
+      <li><a href="/slow_control">Live Slow Control Plots</a></li>
+      <li><a href="/slow_control_datetime"> Time Selection Slow Control Plots</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container" id="database_overlay">
+  <div class="row">
+    <div class="Absolute-Center">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+</body>

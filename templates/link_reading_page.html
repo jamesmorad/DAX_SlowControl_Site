@@ -1,0 +1,127 @@
+{% extends "template.html" %}
+{% block content %}
+
+<!-- Inline CSS based on choices in "Settings" tab -->
+<style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+
+<div class="col-md-8">
+<div class="bootstrap-iso">
+ <div class="container-fluid">
+  <div class="row">
+   <div class="col-md-12">
+    <form action="/delete_link" method="post">
+
+
+     <div class="form-group ">
+      <label class="control-label ">
+       Current Links
+      </label>
+      <div class="">
+       <div class="radio">
+
+          <table border="1">
+            <tr><th>Source</th><th>Target</th><th>Cable Type</th></tr>
+            {% for source,target,cable_type,primary_key in links %}
+            <tr>
+            <td>
+            <label class="radio">
+             <input name="links" type="radio" value="{{ primary_key }}"/>
+                {{source}}</td><td>{{target}}</td><td>{{cable_type}}</td>
+            </label>
+            </tr>
+            {% endfor %}
+          </table>
+
+       </div>
+      </div>
+     </div>
+
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Delete Link
+       </button>
+      </div>
+     </div>
+
+
+    </form>
+   </div>
+  </div>
+ </div>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="bootstrap-iso">
+ <div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form action="/create_link" method="post">
+     <div class="form-group ">
+      <label class="control-label " for="select2">
+       Source
+      </label>
+      <select class="select form-control" id="source" name="source">
+        {% for name,shortname in names %}
+       <option value="{{ shortname }}">
+        {{ name }}
+       </option>
+        {% endfor %}
+      </select>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="select3">
+       Target
+      </label>
+      <select class="select form-control" id="target" name="target">
+       {% for name,shortname in names %}
+       <option value="{{ shortname }}">
+        {{ name }}
+        </option>
+        {% endfor %}
+      </select>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="cable_type">
+       Interface
+      </label>
+      <select class="select form-control" id="cable_type" name="cable_type">
+       <option value="coax">
+        Coaxial cable
+       </option>
+       <option value="multi_bus">
+        Multi bus
+       </option>
+       <option value="ethernet_cable">
+        Ethernet cable
+       </option>
+       <option value="HV">
+        HV coaxial
+       </option>
+       <option value="USB">
+        USB cable
+       </option>
+       <option value="none">
+        None of the above
+       </option>
+      </select>
+     </div>
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit" type="submit">
+        Create link
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
+</div>
+</div>
+
+
+{% endblock %}

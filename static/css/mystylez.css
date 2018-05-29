@@ -1,0 +1,185 @@
+ h1, h2, h3, h4 {
+            text-align: center;
+ }
+body {
+  font: 14px sans-serif;
+}
+
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.grid path,
+.grid line {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2.5px;
+}
+
+svg {
+      display: block;
+      margin: 0 auto;
+}
+
+.row-bottom-margin { margin-bottom:10px; }
+
+/*http://stackoverflow.com/questions/24539197/bootstrap-3-align-text-to-bottom-of-div*/
+@media (min-width: 768px ) {
+  .row {
+      position: relative;
+  }
+
+  .bottom-align-text {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+#licensing {
+  fill: green;
+}
+
+.link.coax{
+  stroke: cyan;
+}
+
+.link.multi_bus {
+  stroke: green;
+}
+
+.link.ethernet_cable {
+  stroke: goldenrod;
+  /*stroke-dasharray: 0,2 1;*/
+}
+.link.HV{
+  stroke: red;
+}
+.link.USB{
+  stroke: purple;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+
+
+div.well{
+  height: 250px;
+} 
+
+.Absolute-Center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.Absolute-Center.is-Responsive {
+  width: 100%; 
+  height: 100%;
+  padding: 150px;
+}
+
+#logo-container{
+  margin: auto;
+  margin-bottom: 10px;
+  width:200px;
+  height:30px;
+  background-image:url('http://placehold.it/200x30/000000/ffffff/&text=BRAND+LOGO');
+}
+.btn-toolbar{
+  text-align: center;
+}​
+
+/* resizeable divs*/
+/* taken from*/
+/* http://stackoverflow.com/questions/25542634/resize-text-div-using-mouse-in-javascript */
+
+.draggable {
+    cursor: move;
+}
+.resizable {
+    border: 1px dashed #000000;
+    position: relative;
+}
+.ui-resizable-nw, .ui-resizable-ne, .ui-resizable-sw, .ui-resizable-se, .ui-resizable-n, .ui-resizable-e, .ui-resizable-s, .ui-resizable-w {
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    position: absolute;
+}
+.ui-resizable-nw {
+    left: -5px;
+    top: -5px;
+    cursor: nw-resize;
+}
+.ui-resizable-ne {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+}
+.ui-resizable-sw {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+.ui-resizable-se {
+    bottom: -5px;
+    right:-5px;
+    cursor: se-resize;
+}
+.ui-resizable-n {
+    top: -5px;
+    left:50%;
+    cursor: n-resize;
+}
+.ui-resizable-s {
+    bottom: -5px;
+    left: 50%;
+    cursor: s-resize;
+}
+.ui-resizable-w {
+    left:-5px;
+    top:calc(50% - 5px);
+    cursor: w-resize;
+}
+.ui-resizable-e {
+    right:-5px;
+    top:calc(50% - 5px);
+    cursor: e-resize;
+}

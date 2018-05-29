@@ -1,0 +1,61 @@
+{% extends "template.html" %}
+{% block content %}
+
+<!-- Inline CSS based on choices in "Settings" tab -->
+<style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<div class="bootstrap-iso" id="add_new_project">
+ <div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form action="/add_proj" method="post">
+     <div class="form-group ">
+      <label class="control-label requiredField" for="name">
+       Full Sub-project Name
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="name" name="name" placeholder="TPC" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label requiredField" for="shortname">
+       Shorthand name (as seen on diagram)
+       <span class="asteriskField">
+        *
+       </span>
+      </label>
+      <input class="form-control" id="shortname" name="shortname" placeholder="TPC" type="text"/>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="owners">
+       Project Owners
+      </label>
+      <textarea class="form-control" cols="40" id="owners" name="owners" rows="10">{{ owners }}</textarea>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="status_complete">
+       Status of Completed Tasks
+      </label>
+      <textarea class="form-control" cols="40" id="status_complete" name="status_complete" rows="10"></textarea>
+     </div>
+     <div class="form-group ">
+      <label class="control-label " for="message1">
+       Status of Remaining Tasks
+      </label>
+      <textarea class="form-control" cols="40" id="status_remaining" name="status_remaining" rows="10"></textarea>
+     </div>
+     <div class="form-group">
+      <div>
+       <button class="btn btn-primary " name="submit_proj" type="submit">
+        Submit
+       </button>
+      </div>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock %}

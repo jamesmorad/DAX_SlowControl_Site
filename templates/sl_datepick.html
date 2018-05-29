@@ -1,0 +1,886 @@
+{% extends "template.html" %}
+{% block content %}
+<!-- Throw in some styles -->
+<!--
+<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/css/mystylez.css">
+
+<script type="text/javascript" src="static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="static/js/moment.min.js"></script>
+<script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+-->
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
+<link rel="stylesheet" href="static/css/mystylez.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript" src="static/js/date.js"></script>
+
+
+
+
+<div class="row">
+
+    <div class='col-sm-2'></div>
+    <div class='col-sm-1'>Start time: </div>
+    <div class='col-sm-3'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+        });
+    </script>
+    <div class='col-sm-2'></div>
+    <div class='col-sm-1'>Stop time: </div>
+    <div class='col-sm-3'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker2'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker2').datetimepicker();
+        });
+    </script>
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" id="submitButton" class="btn btn-default">GO!</button>
+    </div>
+</div> 
+
+<div class="row" id="checkboxes">
+    <div class="col-md-4" style="text-align: center;">
+        <div class="row">
+            <input type="checkbox" id="cbox_ivp" value="ivp">
+            <label for="cbox_ivp">IV Pres</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_mfc" value="mfc">
+            <label for="cbox_mfc">Mass Flow</label>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="cbox_tout" value="tout">
+            <label for="cbox_tout">Outer Temp</label>
+        </div>
+    </div>
+    <div class="col-md-4" style="text-align: center;">
+        <div class="row">
+            <input type="checkbox" id="cbox_tin" value="tin">
+            <label for="cbox_tin">Inner Temp</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_str2" value="str2">
+            <label for="cbox_str2">Strain 2</label>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="cbox_cap" value="cap">
+            <label for="cbox_cap">Cap Level</label>
+        </div>
+    </div>
+    <div class="col-md-4" style="text-align: center;">
+        <div class="row">
+            <input type="checkbox" id="cbox_ovp" value="ovp">
+            <label for="cbox_ovp">Outer Vessel Pres</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_pct" value="pct">
+            <label for="cbox_pct">Heater Power Percentage</label>
+        </div> 
+
+    </div>  
+</div>
+
+<div class="row" id="plots">
+
+    <div class="row" id="vac_cont_row">
+        <div class="col-md-2">
+            <a id="exportJSON" onclick="exportJson(this,vac_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_vac" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="vac_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="mfc_cont_row">
+        <div class="col-md-2" id="download_mfc">
+            <a id="exportJSON" onclick="exportJson(this,mfc_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_mfc" class="btn btn-default">Download</button>    
+            </a>
+            
+        </div>
+        <div class="col-md-8">
+            <div id="mfc_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="tmpa_cont_row">
+        <div class="col-md-2" id="download_tmpa">
+             <a id="exportJSON" onclick="exportJson(this,tmpa_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_tmpa" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="tmpa_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="tmpb_cont_row">
+        <div class="col-md-2" id="download_tmpb">
+                <a id="exportJSON" onclick="exportJson(this,tmpb_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_tmpb" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="tmpb_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="str_cont_row">
+        <div class="col-md-2" id="download_str">
+             <a id="exportJSON" onclick="exportJson(this,str_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_str" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="str_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+      
+    <div class="row" id="cap_cont_row">  
+        <div class="col-md-2" id="download_cap">
+             <a id="exportJSON" onclick="exportJson(this,cap_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_cap" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="cap_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div> 
+
+    <div class="row" id="ovp_cont_row">  
+        <div class="col-md-2" id="download_ovp">
+             <a id="exportJSON" onclick="exportJson(this,ovp_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_ovp" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="ovp_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>   
+
+    <div class="row" id="pct_cont_row">  
+        <div class="col-md-2" id="download_pct">
+             <a id="exportJSON" onclick="exportJson(this,pct_chart);" class="btn">
+                <i class="icon-download"></i>
+                <button type="button" id="download_pct" class="btn btn-default">Download</button>    
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div id="pct_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>   
+
+</div>
+
+<script>
+
+$('#checkboxes').hide();
+$('#plots').hide();
+$('#vac_cont_row').hide();
+$('#mfc_cont_row').hide();
+$('#tmpa_cont_row').hide();
+$('#tmpb_cont_row').hide();
+$('#str_cont_row').hide();
+$('#cap_cont_row').hide();
+$('#ovp_cont_row').hide();
+$('#pct_cont_row').hide();
+
+var vac_chart;
+var mfc_chart;
+var tmpa_chart;
+var tmpb_chart;
+var str_chart;
+var cap_chart;
+var ovp_chart;
+var pct_chart;
+
+
+function exportJson(el,chart) {
+
+    var obj = {
+        "times": chart.series[0].xData,
+        "data": chart.series[0].yData
+    };
+    var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+    // what to return in order to show download window?
+
+    el.setAttribute("href", "data:"+data);
+    el.setAttribute("download", "data.json");
+    
+}
+$('#submitButton').click(function(){
+    var dateString; 
+    var timestamp_start;
+    var timestamp_end;
+    if($('#datetimepicker1').data('date') == null || $('#datetimepicker2').data('date') == null){
+         alert("You must have a time selected for both start and stop!");
+    }
+    else{
+        dateString = $('#datetimepicker1').data('date');
+        timestamp_start = Date.parse(dateString).getTime()/1000;
+        dateString = $('#datetimepicker2').data('date');
+        timestamp_end = Date.parse(dateString).getTime()/1000;
+        if (timestamp_end < timestamp_start){
+            alert("You must choose a stop time later than the start time!")
+        }
+        else{
+            $('#checkboxes').show();
+            $('#plots').show();
+            $('#cbox_ivp').change(function () {
+                if (this.checked) { $('#vac_cont_row').show(); vac_chart.reflow(); }
+                else { $('#vac_cont_row').hide(); }
+                });
+            $('#cbox_mfc').change(function () {
+                if (this.checked) { $('#mfc_cont_row').show(); mfc_chart.reflow(); }
+                else { $('#mfc_cont_row').hide(); }
+                });
+            $('#cbox_tout').change(function () {
+                if (this.checked) { $('#tmpa_cont_row').show(); tmpa_chart.reflow(); }
+                else { $('#tmpa_cont_row').hide(); }
+                });
+            $('#cbox_tin').change(function () {
+                if (this.checked) { $('#tmpb_cont_row').show(); tmpb_chart.reflow(); }
+                else { $('#tmpb_cont_row').hide(); }
+                });
+            $('#cbox_str2').change(function () {
+                if (this.checked) { $('#str_cont_row').show(); str_chart.reflow(); }
+                else { $('#str_cont_row').hide(); }
+                });
+            $('#cbox_cap').change(function () {
+                if (this.checked) { $('#cap_cont_row').show(); cap_chart.reflow(); }
+                else { $('#cap_cont_row').hide(); }
+                });
+            $('#cbox_ovp').change(function () {
+                if (this.checked) { $('#ovp_cont_row').show(); ovp_chart.reflow(); }
+                else { $('#ovp_cont_row').hide(); }
+                });
+            $('#cbox_pct').change(function () {
+                if (this.checked) { $('#pct_cont_row').show(); pct_chart.reflow(); }
+                else { $('#pct_cont_row').hide(); }
+                });
+            }
+
+        function requestData(chart,table,timestamp_start,timestamp_end) {
+            $.ajax({
+                url: '/slow_control_data_time_selection',
+                type: 'POST',
+                data: JSON.stringify({"table":table,"start_time":timestamp_start,"stop_time":timestamp_end}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data_series) {        
+                    chart.series[0].setData(data_series[table], true);
+                },
+                cache: false
+            });
+        }
+
+
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+
+        vac_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'vac_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"VAC2",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Inner Vessel Pressure'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    formatter: function(){
+                        return this.value.toExponential(4);
+                    },
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'VAC2 (bar)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+            {
+            yAxis: 0,
+            name: "VAC2",
+            tooltip: {valueDecimals: 3},
+            color: 'blue',
+            turboThreshold: 9000
+            }
+            ]
+        });
+
+
+        mfc_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'mfc_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"MFC1",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Xe Circulation Mass Flow'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'MFC1 (sccm)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+            {
+              yAxis: 0,
+              name: "MFC1",
+              tooltip: {valueDecimals: 3},
+              color: 'red',
+              turboThreshold: 9000
+            }
+            ]
+        });
+
+        tmpa_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'tmpa_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"TMPA",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Temperature Outer Vessel'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'TMP (K)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+
+            {
+              yAxis: 0,
+              name: "TMP",
+              tooltip: {valueDecimals: 1},
+              color: 'black',
+              turboThreshold: 9000
+            }
+
+            ]
+        });
+
+        tmpb_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'tmpb_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"TMPB",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Temperature Inner Vessel'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'TMP (K)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+
+            {
+              yAxis: 0,
+              name: "TMP",
+              tooltip: {valueDecimals: 1},
+              color: 'black',
+              turboThreshold: 9000
+            }
+
+            ]
+        });
+
+
+        str_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'str_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"STR",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Strain Gauge 2 Weight'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'STR (kg)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+            {
+              yAxis: 0,
+              name: "STR",
+              tooltip: {valueDecimals: 3},
+              color: 'orange',
+              turboThreshold: 9000
+            }
+            ]
+        });
+
+        cap_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'cap_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"CAP1",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Capacitance liquid level'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'CAP1 (pF)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+            {
+              yAxis: 0,
+              name: "CAP",
+              tooltip: {valueDecimals: 3},
+              color: 'orange',
+              turboThreshold: 9000
+            }
+
+            ]
+        });
+
+
+        ovp_chart = new Highcharts.StockChart({
+              chart: {
+                renderTo: 'ovp_cont',
+                zoomType: 'xy',
+                events: {
+                        load: function(){requestData(this,"VAC1",timestamp_start,timestamp_end);}
+                }
+            },
+            rangeSelector: {
+                allButtonsEnabled: true,
+                //selected: 2
+                buttons: [
+                        {
+                        type: 'minute',
+                        count: 30,
+                        text: '30m'
+                        },
+                        {
+                        type: 'minute',
+                        count: 180,
+                        text: '3h'
+                        },
+                        {
+                        type: 'minute',
+                        count: 360,
+                        text: '6h'
+                        },
+                        {
+                        type: 'all',
+                        text: '24h'
+                        }
+                        ]
+            },
+            title: {
+                text: 'Outer vessel pressure'
+            },
+            xAxis: {
+                type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+                    formatter: function(){ return this.value.toExponential(4);},
+                    align: 'right',
+                    x: 0
+                    },
+                    title: {
+                            text: 'VAC1 (torr)',
+                            },
+                    opposite: true,
+                    top: '0%',
+                    height: '100%',
+                    lineWidth: 2
+            }
+            ],
+            series:[
+            {
+              yAxis: 0,
+              name: "VAC1",
+              tooltip: {valueDecimals: 3},
+              color: 'orange',
+              turboThreshold: 9000
+            }
+
+            ]
+        });
+
+
+        pct_chart = new Highcharts.StockChart({
+            chart: {
+            renderTo: 'pct_cont',
+            zoomType: 'xy',
+            events: {
+            load: function(){requestData(this,"TMP");}
+            }
+            },
+            rangeSelector: {
+            allButtonsEnabled: true,
+            //selected: 2
+            buttons: [
+            {
+            type: 'minute',
+            count: 30,
+            text: '30m'
+            },
+            {
+            type: 'minute',
+            count: 180,
+            text: '3h'
+            },
+            {
+            type: 'minute',
+            count: 360,
+            text: '6h'
+            },
+            {
+            type: 'all',
+            text: '24h'
+            }
+            ]
+            },
+            title: {
+            text: 'Heater Power Percentage'
+            },
+            xAxis: {
+            type: 'datetime',
+            },
+            yAxis: [
+            {
+            type: 'linear',
+            labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+            text: 'HTR Power (%)',
+            },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+            }
+            ],
+            series:[
+            {
+            yAxis: 0,
+            name: "HTRPWR",
+            tooltip: {valueDecimals: 3},
+            color: 'red',
+            turboThreshold: 9000
+            }
+
+            ]
+            });
+
+    }
+
+});
+</script>
+
+{% endblock %}

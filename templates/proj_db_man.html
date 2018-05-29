@@ -1,0 +1,40 @@
+{% extends "template.html" %}
+{% block content %}
+
+<div class="container" id="database_overlay">
+  <div class="row">
+    <div class="Absolute-Center is-Responsive">
+      <div class="col-sm-12 col-md-10 col-md-offset-1">
+	    <div class="btn-toolbar">
+	    	
+			<button type="button" id="read_proj" class="btn btn-default btn-lg">
+			Read/Edit Current Project List</button>	    	
+			<button type="button" id="read_link" class="btn btn-default btn-lg">
+			Read/Edit Link List</button>
+	    	<button type="button" id="add_proj" class="btn btn-default btn-lg">
+	    	Add New Project</button>
+	    </div>  
+	</div>
+    </div>    
+  </div>
+</div>
+
+<script>
+	$(function() {
+	$("#read_proj").click(function() {
+		window.location.href='/project_reading_page';
+	});
+	});
+	$(function() {
+	$("#add_proj").click(function() {
+		window.location.href='/project_adding_page';
+	});
+	});
+	$(function() {
+	$("#read_link").click(function() {
+		window.location.href='/link_reading_page';
+	});
+});
+</script>
+
+{% endblock %}

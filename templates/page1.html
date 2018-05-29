@@ -1,0 +1,218 @@
+<!--Add necessary scripts-->
+<script src="static/js/jquery-1.11.3.min.js"></script>
+<script src="static/js/d3.js"></script>
+<script src="static/js/colorbar.js"></script>
+<script src="static/js/highstock.js"></script>
+<!-- Add styles -->
+<link rel="stylesheet" href="static/css/bootstrap.min.css">
+<link rel="stylesheet" href="static/css/mystylez.css">
+
+<!DOCTYPE html>
+<!-- D3.js chart taken from http://bl.ocks.org/crayzeewulf/9719255-->
+
+<meta charset="utf-8">
+
+<body>
+
+<div class="row-fluid row-bottom-margin" align="center">
+  <h1> </h1>
+<div align="center">
+<a href="{{ url_for('index') }}"><button style="height:40px;width:200px">Xenon</button></a>
+<a href="{{ url_for('page1') }}"><button style="height:40px;width:200px">Detector</button></a>
+<a href="{{ url_for('page2') }}"><button style="height:40px;width:200px">Other</button></a>
+</div>
+
+<div id="container1" style="width:100%; height:500px;"></div>
+<div id="container2" style="width:100%; height:100px;"></div>
+<div id="container3" style="width:100%; height:100px;"></div>
+
+<script>
+//////////////////////////////// Acquire Data Sets
+////    acquireData2
+function requestData2() {
+        $.ajax({
+            url: '/slow_control_plotting',
+            type: 'GET',
+            contentType: "application/json; charset=utf-8",
+            success: function(data_series) {              
+                chart.series[0].setData(data_series.VAC1_3, true);
+                chart.series[1].setData(data_series.TMP_4, true);
+                chart.series[2].setData(data_series.HVC_5, true);
+                chart.series[3].setData(data_series.HVC_6, true);
+              setTimeout(requestData, 1000);  
+            },
+            cache: false
+        });
+    }
+//////////////////////////////// END-Acquire Data Sets
+</script>
+
+
+<script>
+//// Rendering all in same container... No go
+//// Rendering in same script... Problem?: Output URL all the same?
+//// Problem?: "user_classification" Function all the same?
+////
+//// Different pages per section?!
+</script>
+
+
+
+<script>
+//////////////////////////////// Fill Container 2     CURRENTLY OPERATIONAL!
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});
+
+var chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'container1',
+        backgroundColor:'rgba(255,255,255,0.0)',
+        zoomType: 'xy',
+        events: {
+                    load: requestData2
+                }
+    },
+    rangeSelector: {
+        buttons: [
+                {
+                type: 'minute',
+                count: 1,
+                text: '1 m.'
+                }, 
+                {
+                type: 'minute',
+                count: 10,
+                text: '10 m.'
+                }, 
+                {
+                type: 'minute',
+                count: 180,
+                text: '3 hr.'
+                }, 
+                {
+                type: 'all',
+                text: 'All'
+                }
+                ],
+        selected: 0
+    },
+    title: {
+        text: 'Detector',
+        style: {
+                color: '#2769CD',
+                fontWeight: 'bold',
+                fontSize: '26px'
+            }
+    },
+    xAxis: {
+        type: "datetime",    
+        ordinal: false
+    },
+
+    ////    plotFormat1
+    yAxis: [
+
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'VAC1 [pres., torr]',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '25%',
+            lineWidth: 2
+    },
+
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0,
+            },
+            title: {
+                    text: 'TMP A [temp., K]',
+                    },
+            opposite: true,
+            top: '25%',
+            height: '25%',
+            lineWidth: 2
+    },
+
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0,
+            },
+            title: {
+                    text: 'HVC Pos [volt. out, v]',
+                    },
+            opposite: true,
+            top: '50%',
+            height: '25%',
+            lineWidth: 2
+    },
+
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'HVC Neg [volt. out, v]',
+                    },
+            opposite: true,
+            top: '75%',
+            height: '25%',
+            lineWidth: 2
+    }
+    
+    ],
+    ////    END-plotFormat1
+
+    ////    plotFormat2                     
+    series:[
+    
+    {
+    yAxis: 0,
+    name: "VAC1_3",
+    color: 'blue'
+    },
+
+    {
+    yAxis: 1,
+    name: "TMP_4",
+    tooltip: {valueDecimals: 1},
+    color: 'red'
+    },
+
+    {
+    yAxis: 2,
+    name: "HVC_5",
+    tooltip: {valueDecimals: 1},
+    color: 'red'
+    },
+
+    {
+    yAxis: 3,
+    name: "HVC_6",
+    tooltip: {valueDecimals: 1},
+    color: 'yellow'
+    }
+
+    ]
+////    END-plotFormat2
+}); 
+//////////////////////////////// END-Fill Container 2
+</script>
+
+
+</body>

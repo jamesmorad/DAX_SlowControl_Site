@@ -1,0 +1,752 @@
+{% extends "template.html" %}
+{% block content %}
+
+<div class="row-fluid row-bottom-margin">
+  <h2>DAX SC Plotter</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-4" style="text-align: center;">
+        <div class="row">
+            <input type="checkbox" id="cbox_ivp" value="ivp">
+            <label for="cbox_ivp">IV Pres</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_mfc" value="mfc">
+            <label for="cbox_mfc">Mass Flow</label>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="cbox_tout" value="tout">
+            <label for="cbox_tout">Outer Temp</label>
+        </div>
+    </div>
+    <div class="col-md-4" style="text-align: center;">
+        <div class="row">
+            <input type="checkbox" id="cbox_tin" value="tin">
+            <label for="cbox_tin">Inner Temp</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_str2" value="str2">
+            <label for="cbox_str2">Strain 2</label>
+        </div>
+        <div class="row">
+            <input type="checkbox" id="cbox_cap" value="cap">
+            <label for="cbox_cap">Cap Level</label>
+        </div>
+    </div>
+    <div class="col-md-4" style="text-align: center;">
+         <div class="row">
+            <input type="checkbox" id="cbox_ovp" value="ovp">
+            <label for="cbox_ovp">Outer Vessel Pres</label>
+        </div> 
+        <div class="row">
+            <input type="checkbox" id="cbox_pct" value="pct">
+            <label for="cbox_pct">Heater Power Percentage</label>
+        </div> 
+    </div>
+
+
+</div>
+
+<div class="row">
+
+    <div class="row" id="vac_cont_row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="vac_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="mfc_cont_row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="mfc_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="tmpa_cont_row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="tmpa_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="tmpb_cont_row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="tmpb_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <div class="row" id="str_cont_row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="str_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+      
+    <div class="row" id="cap_cont_row">  
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="cap_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>   
+
+    <div class="row" id="ovp_cont_row">  
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="ovp_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>   
+
+    <div class="row" id="pct_cont_row">  
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="pct_cont" style="width:100%; height:500px;"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>   
+
+</div>
+
+<script>
+$('#vac_cont_row').hide();
+$('#mfc_cont_row').hide();
+$('#tmpa_cont_row').hide();
+$('#tmpb_cont_row').hide();
+$('#str_cont_row').hide();
+$('#cap_cont_row').hide();
+$('#ovp_cont_row').hide();
+$('#pct_cont_row').hide();
+
+$('#cbox_ivp').change(function () {
+    if (this.checked) { $('#vac_cont_row').show(); vac_chart.reflow(); }
+    else { $('#vac_cont_row').hide(); }
+});
+$('#cbox_mfc').change(function () {
+    if (this.checked) { $('#mfc_cont_row').show(); mfc_chart.reflow(); }
+    else { $('#mfc_cont_row').hide(); }
+});
+$('#cbox_tout').change(function () {
+    if (this.checked) { $('#tmpa_cont_row').show(); tmpa_chart.reflow(); }
+    else { $('#tmpa_cont_row').hide(); }
+});
+$('#cbox_tin').change(function () {
+    if (this.checked) { $('#tmpb_cont_row').show(); tmpb_chart.reflow(); }
+    else { $('#tmpb_cont_row').hide(); }
+});
+$('#cbox_str2').change(function () {
+    if (this.checked) { $('#str_cont_row').show(); str_chart.reflow(); }
+    else { $('#str_cont_row').hide(); }
+});
+$('#cbox_cap').change(function () {
+    if (this.checked) { $('#cap_cont_row').show(); cap_chart.reflow(); }
+    else { $('#cap_cont_row').hide(); }
+});
+
+$('#cbox_ovp').change(function () {
+    if (this.checked) { $('#ovp_cont_row').show(); ovp_chart.reflow(); }
+    else { $('#ovp_cont_row').hide(); }
+});
+
+$('#cbox_pct').change(function () {
+    if (this.checked) { $('#pct_cont_row').show(); pct_chart.reflow(); }
+    else { $('#pct_cont_row').hide(); }
+});
+
+function requestData(chart,table) {
+	if(chart.series[0].xData[0] == null){
+		last_time = 0; 
+	}
+	else{
+		last_time = chart.series[0].xData[chart.series[0].xData.length-1]/1000.;
+	}
+        $.ajax({
+            url: '/slow_control_data',
+            type: 'POST',
+            data: JSON.stringify({"table":table,"last_time":last_time}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(data_series) {
+              if(last_time == 0){
+                  chart.series[0].setData(data_series[table], true);
+              }
+              else{
+			for(var i=0;i<data_series[table].length;i++){
+				if(Math.abs(chart.series[0].xData[0] - chart.series[0].xData[chart.series[0].xData.length-1]) > 86400000){
+					chart.series[0].addPoint(data_series[table][i],redraw=false,shift=true);
+				}
+				else{
+					chart.series[0].addPoint(data_series[table][i],redraw=false);
+				}
+			}
+			chart.redraw();
+              }
+              setTimeout(function(){requestData(chart,table);}, 10000);
+            },
+            cache: false
+        });
+}
+
+
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});
+
+
+var vac_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'vac_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"VAC2");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Inner Vessel Pressure'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            formatter: function(){
+                return this.value.toExponential(4);
+            },
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'VAC2 (bar)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+    yAxis: 0,
+    name: "VAC2",
+    tooltip: {valueDecimals: 3},
+    color: 'blue',
+    turboThreshold: 9000
+    }
+    ]
+});
+
+
+var mfc_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'mfc_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"MFC1");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Xe Circulation Mass Flow'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'MFC1 (sccm)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+      yAxis: 0,
+      name: "MFC1",
+      tooltip: {valueDecimals: 3},
+      color: 'red',
+      turboThreshold: 9000
+    }
+    ]
+});
+
+var tmpa_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'tmpa_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"TMPA");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Temperature Outer Vessel'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'TMP (K)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+
+    {
+      yAxis: 0,
+      name: "TMP",
+      tooltip: {valueDecimals: 1},
+      color: 'black',
+      turboThreshold: 9000
+    }
+
+    ]
+});
+
+var tmpb_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'tmpb_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"TMPB");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Temperature Inner Vessel'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'TMP (K)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+
+    {
+      yAxis: 0,
+      name: "TMP",
+      tooltip: {valueDecimals: 1},
+      color: 'black',
+      turboThreshold: 9000
+    }
+
+    ]
+});
+
+
+var str_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'str_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"STR");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Strain Gauge 2 Weight'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'STR (kg)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+      yAxis: 0,
+      name: "STR",
+      tooltip: {valueDecimals: 3},
+      color: 'orange',
+      turboThreshold: 9000
+    }
+    ]
+});
+
+var cap_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'cap_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"CAP1");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Capacitance liquid level'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'CAP1 (pF)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+      yAxis: 0,
+      name: "CAP",
+      tooltip: {valueDecimals: 3},
+      color: 'orange',
+      turboThreshold: 9000
+    }
+
+    ]
+});
+
+
+var ovp_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'ovp_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"VAC1");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Outer vessel pressure'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            formatter: function(){ return this.value.toExponential(4);},
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'VAC1 (torr)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+      yAxis: 0,
+      name: "VAC1",
+      tooltip: {valueDecimals: 3},
+      color: 'orange',
+      turboThreshold: 9000
+    }
+
+    ]
+});
+
+
+var pct_chart = new Highcharts.StockChart({
+      chart: {
+        renderTo: 'pct_cont',
+        zoomType: 'xy',
+        events: {
+                    load: function(){requestData(this,"TMP");}
+                }
+    },
+    rangeSelector: {
+        allButtonsEnabled: true,
+        //selected: 2
+        buttons: [
+                {
+                type: 'minute',
+                count: 30,
+                text: '30m'
+                },
+                {
+                type: 'minute',
+                count: 180,
+                text: '3h'
+                },
+                {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+                },
+                {
+                type: 'all',
+                text: '24h'
+                }
+                ]
+    },
+    title: {
+        text: 'Heater Power Percentage'
+    },
+    xAxis: {
+        type: 'datetime',
+    },
+    yAxis: [
+    {
+    type: 'linear',
+    labels: {
+            align: 'right',
+            x: 0
+            },
+            title: {
+                    text: 'HTR Power (%)',
+                    },
+            opposite: true,
+            top: '0%',
+            height: '100%',
+            lineWidth: 2
+    }
+    ],
+    series:[
+    {
+      yAxis: 0,
+      name: "HTRPWR",
+      tooltip: {valueDecimals: 3},
+      color: 'red',
+      turboThreshold: 9000
+    }
+
+    ]
+});
+
+
+</script>
+
+{% endblock %}
